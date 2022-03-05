@@ -108,5 +108,24 @@ export default {
       ],
     };
   },
+  methods: {
+    getList() {
+      const axios = require("axios");
+      axios
+        .post("https://localhost:7109/api/Person/getAll", {
+          pageSize: 0,
+          index: 0,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+  },
+  created() {
+      this.getList();
+  }
 };
 </script>
