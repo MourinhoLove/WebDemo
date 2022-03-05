@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import {eventBus} from "../main";
 export default {
   data() {
     return {
@@ -57,6 +58,10 @@ export default {
   created() {
     // 这里的created是Vue提供的生命周期的其中一个
     this.getList();
+    // 这里创建一个监听
+     eventBus.$on('update', () => {
+            this.getList();
+    })
   },
 };
 </script>

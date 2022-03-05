@@ -49,6 +49,8 @@
   </v-dialog>
 </template>
 <script>
+import {eventBus} from "../main";
+
 export default {
   props: {
     // 该属性判断是否是新增还是编辑
@@ -81,7 +83,8 @@ export default {
         })
         .then((response) => {
             console.log(response.data);
-            alert("新增成功");
+            this.dialog = false
+            eventBus.$emit('update');
         });
     },
   },
