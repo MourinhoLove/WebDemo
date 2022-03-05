@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
-        <v-img
+        <!-- <v-img
           alt="Vuetify Logo"
           class="shrink mr-2"
           contain
@@ -18,38 +18,36 @@
           min-width="100"
           src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
           width="100"
-        />
+        /> -->
       </div>
-
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-btn color="primary" @click="showPop"> 新增人员 </v-btn>
     </v-app-bar>
 
     <v-main>
       <table-view />
+      <person-card  class="mt-5"></person-card>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import TableView from "./components/TableView.vue"
+import TableView from "./components/TableView.vue";
+import PersonCard from "./components/PersonCard.vue"
 export default {
   name: "App",
-
   components: {
-    TableView
+    TableView,
+    PersonCard
   },
-
   data: () => ({
     //
   }),
+  methods: {
+    // 绑定了按钮点击事件
+    showPop() {
+      alert("Test")
+    }
+  }
 };
 </script>

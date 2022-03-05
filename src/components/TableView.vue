@@ -1,3 +1,4 @@
+
 <template>
   <v-data-table
     :headers="headers"
@@ -13,15 +14,15 @@ export default {
     return {
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "ID",
           align: "start",
           sortable: false,
           value: "id",
         },
-        { text: "Calories", value: "name" },
-        { text: "Fat (g)", value: "age" },
-        { text: "Carbs (g)", value: "address" },
-        { text: "Protein (g)", value: "protein" },
+        { text: "名称", value: "name" },
+        { text: "年龄", value: "age" },
+        { text: "地址", value: "address" },
+        { text: "操作", value: "" },
         { text: "Iron (%)", value: "iron" },
       ],
       vlaues: [
@@ -35,6 +36,11 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description: 该方法获取服务端的列表数据 
+     * @param {*}
+     * @return {*}
+     */
     getList() {
       const axios = require("axios");
       axios
@@ -49,6 +55,7 @@ export default {
     },
   },
   created() {
+    // 这里的created是Vue提供的生命周期的其中一个
     this.getList();
   },
 };
