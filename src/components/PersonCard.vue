@@ -2,7 +2,7 @@
  * @Author: Zhangqilei
  * @Date: 2022-03-05 13:01:45
  * @LastEditors: Zhangqilei
- * @LastEditTime: 2022-03-07 14:40:24
+ * @LastEditTime: 2022-03-07 15:41:31
  * @Description: 
  * 
 -->
@@ -48,7 +48,12 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn dark color="pink" @click="createPerson">创建</v-btn>
+        <v-btn dark color="pink" @click="deletePerson" v-if="isEdit">{{
+          "删除"
+        }}</v-btn>
+        <v-btn dark color="blue" @click="createPerson">{{
+          isEdit ? "确定" : "创建"
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -67,10 +72,12 @@ export default {
     return {
       //这里定义一个对象
       user: this.editUser,
+      // 判断是不是编辑模式
       isEdit: false,
     };
   },
   methods: {
+    // 创建和编辑
     createPerson() {
       const axios = require("axios");
       if (this.isEdit) {
@@ -95,6 +102,20 @@ export default {
           })
           .then((response) => {
             console.log(response.data);
+            this.show = false;
+            eventBus.$emit("update");
+          });
+      }
+    },
+    // 删除
+    deletePerson() {
+      if (this.isEdit) {
+        const axios = require("axios");
+        axios
+          .post("https://localhost:7109/api/Person/deleteById", {
+            id: this.user.id,
+          })
+          .then((response) => {
             this.show = false;
             eventBus.$emit("update");
           });
