@@ -2,7 +2,7 @@
  * @Author: Zhangqilei
  * @Date: 2022-03-05 08:43:05
  * @LastEditors: Zhangqilei
- * @LastEditTime: 2022-03-07 15:00:45
+ * @LastEditTime: 2022-03-07 15:53:39
  * @Description: 
  * 
 -->
@@ -75,7 +75,7 @@ export default {
     },
     // 删除操作
     deleteItem(item) {
-      console.log(item);
+      this.$emit('onEmitIndex', JSON.parse(JSON.stringify(item)))
     },
   },
   created() {

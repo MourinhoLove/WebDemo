@@ -2,7 +2,7 @@
  * @Author: Zhangqilei
  * @Date: 2022-03-05 08:40:05
  * @LastEditors: Zhangqilei
- * @LastEditTime: 2022-03-07 13:35:15
+ * @LastEditTime: 2022-03-07 15:57:26
  * @Description: 
  * 
 -->
@@ -10,11 +10,16 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-      <v-btn color="red lighten-2" @click="isShow = true"> 新增 </v-btn>
-      <person-card class="mt-5" :value="isShow" :editUser="user"  @myEvent="changeStatus"></person-card>
+      <v-btn color="red lighten-2" @click="addPerson"> 新增 </v-btn>
+      <person-card
+        class="mt-5"
+        :value="isShow"
+        :editUser="user"
+        @myEvent="changeStatus"
+      ></person-card>
     </v-app-bar>
     <v-main>
-      <table-view @onEmitIndex="showPop"> </table-view>
+      <table-view @onEmitIndex="setPerson"> </table-view>
     </v-main>
   </v-app>
 </template>
@@ -41,17 +46,22 @@ export default {
   }),
   methods: {
     // 绑定了按钮点击事件
-    showPop(item) {
-      this.isShow = true;
+    setPerson(item) {
       this.user = item;
+      this.isShow = true;
+    },
+    // 新增用户
+    addPerson() {
+      this.user = {};
+      this.isShow = true;
     },
     // 当对话框消失的时候 会发出一个通知,这里监听这个通知,目的是因为对话框是当前组件的子组件
     // 所以我把对话框的显示和消失,让当前组件来控制
     // 其实你也可以让组件自己控制,等我再研究研究vue和再来考虑最合适的做法
     // 这里为了演示就先不去管他
     changeStatus(isShow) {
-      this.isShow = isShow
-    }
+      this.isShow = isShow;
+    },
   },
 };
 </script>
