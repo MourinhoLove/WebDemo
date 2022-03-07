@@ -2,7 +2,7 @@
  * @Author: Zhangqilei
  * @Date: 2022-03-05 08:43:05
  * @LastEditors: Zhangqilei
- * @LastEditTime: 2022-03-07 11:37:09
+ * @LastEditTime: 2022-03-07 15:00:45
  * @Description: 
  * 
 -->
@@ -68,18 +68,14 @@ export default {
           console.log(this.value);
         });
     },
+    // 编辑操作
     editItem(item) {
-      // 通知卡片组件进行弹窗的更新
-      this.$emit('onEmitIndex', item)
-      // this.editedIndex = this.desserts.indexOf(item)
-      // this.editedItem = Object.assign({}, item)
-      // this.dialog = true
+      // 通知卡片组件进行弹窗的更新 记得这里要拷贝对.
+      this.$emit('onEmitIndex', JSON.parse(JSON.stringify(item)))
     },
+    // 删除操作
     deleteItem(item) {
       console.log(item);
-      // this.editedIndex = this.desserts.indexOf(item)
-      // this.editedItem = Object.assign({}, item)
-      // this.dialogDelete = true
     },
   },
   created() {

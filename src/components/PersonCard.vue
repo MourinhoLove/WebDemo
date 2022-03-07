@@ -2,7 +2,7 @@
  * @Author: Zhangqilei
  * @Date: 2022-03-05 13:01:45
  * @LastEditors: Zhangqilei
- * @LastEditTime: 2022-03-07 13:43:47
+ * @LastEditTime: 2022-03-07 14:40:24
  * @Description: 
  * 
 -->
@@ -12,7 +12,7 @@
     <v-card class="elevation-12">
       <v-toolbar dark color="primary">
         <v-toolbar-title>{{
-          editUser ? "编辑人员" : "创建人员"
+          isEdit ? "编辑人员" : "创建人员"
         }}</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -58,7 +58,7 @@ import { eventBus } from "../main";
 
 export default {
   props: {
-    // 这里你也可以直接写 isEdit: Boolean，我这么写的目的是为了告诉vue这是父组件必须传过来的数据    
+    // 这里你也可以直接写 isEdit: Boolean，我这么写的目的是为了告诉vue这是父组件必须传过来的数据
     editUser: Object, // 为了暴露给父组件这里定义了一个user.
     // value是让父组件控制自己是否显示的.它的值根据父组件来定
     value: Boolean,
@@ -67,23 +67,38 @@ export default {
     return {
       //这里定义一个对象
       user: this.editUser,
+      isEdit: false,
     };
   },
   methods: {
     createPerson() {
       const axios = require("axios");
-      axios
-        .post("https://localhost:7109/api/Person/create", {
-          name: this.user.name,
-          age: this.user.age,
-          address: this.user.address,
-          id: 0,
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.show = false;
-          eventBus.$emit("update");
-        });
+      if (this.isEdit) {
+        axios
+          .post("https://localhost:7109/api/Person/update", {
+            name: this.user.name,
+            age: this.user.age,
+            address: this.user.address,
+            id: this.user.id,
+          })
+          .then((response) => {
+            this.show = false;
+            eventBus.$emit("update");
+          });
+      } else {
+        axios
+          .post("https://localhost:7109/api/Person/create", {
+            name: this.user.name,
+            age: this.user.age,
+            address: this.user.address,
+            id: 0,
+          })
+          .then((response) => {
+            console.log(response.data);
+            this.show = false;
+            eventBus.$emit("update");
+          });
+      }
     },
   },
   computed: {
@@ -105,7 +120,9 @@ export default {
     // 监听属性 这里监听父组件传过来的user数据
     editUser(val) {
       this.user = val;
-    }
+      // 判断是编辑还是新增
+      this.isEdit = Object.keys(val).length === 0 ? false : true;
+    },
   },
 };
 </script>
