@@ -1,13 +1,18 @@
+<!--
+ * @Author: Zhangqilei
+ * @Date: 2022-03-05 13:01:45
+ * @LastEditors: Zhangqilei
+ * @LastEditTime: 2022-03-07 13:43:47
+ * @Description: 
+ * 
+-->
 <template>
-  <v-dialog v-model="dialog" width="530">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn color="red lighten-2" v-bind="attrs" v-on="on"> 新增 </v-btn>
-    </template>
+  <v-dialog v-model="show" width="530">
     <!-- 这里创建卡片 -->
     <v-card class="elevation-12">
       <v-toolbar dark color="primary">
         <v-toolbar-title>{{
-          isEdit ? "编辑人员" : "创建人员"
+          editUser ? "编辑人员" : "创建人员"
         }}</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -49,26 +54,19 @@
   </v-dialog>
 </template>
 <script>
-import {eventBus} from "../main";
+import { eventBus } from "../main";
 
 export default {
   props: {
-    // 该属性判断是否是新增还是编辑
-    // 这里你也可以直接写 isEdit: Boolean，我这么写的目的是为了告诉vue这是父组件必须传过来的数据
-    isEdit: {
-      required: true,
-      type: Boolean,
-    },
+    // 这里你也可以直接写 isEdit: Boolean，我这么写的目的是为了告诉vue这是父组件必须传过来的数据    
+    editUser: Object, // 为了暴露给父组件这里定义了一个user.
+    // value是让父组件控制自己是否显示的.它的值根据父组件来定
+    value: Boolean,
   },
   data() {
     return {
-      dialog: false,
       //这里定义一个对象
-      user: {
-        name: "",
-        age: null,
-        address: "",
-      },
+      user: this.editUser,
     };
   },
   methods: {
@@ -79,14 +77,35 @@ export default {
           name: this.user.name,
           age: this.user.age,
           address: this.user.address,
-          id: 0
+          id: 0,
         })
         .then((response) => {
-            console.log(response.data);
-            this.dialog = false
-            eventBus.$emit('update');
+          console.log(response.data);
+          this.show = false;
+          eventBus.$emit("update");
         });
     },
+  },
+  computed: {
+    // 计算属性
+    // 这个属性 是我自己控制我自己要不要显示
+    // 因为我需要比如添加成功后,我要把弹窗消失,我需要改变value.可是vue里面,我子组件永远不能在本身去改变它
+    // 所以需要定义一个Show去追踪value
+    show: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        // 发送一个自定义事件,由父组件去定义它
+        this.$emit("myEvent", value);
+      },
+    },
+  },
+  watch: {
+    // 监听属性 这里监听父组件传过来的user数据
+    editUser(val) {
+      this.user = val;
+    }
   },
 };
 </script>
